@@ -15,8 +15,8 @@ export default function Home() {
       <h1 id="products_heading">Latest Products</h1>
       <section id="products" className="container mt-5">
         <div className="row">
-         {products.map(product => <ProductCard product={product}/>)}
-            
+          {products.map(product =><ProductCard product={product}/>)} 
+         
         </div>
       </section>
     </Fragment>
