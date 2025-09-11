@@ -21,7 +21,7 @@ Frontend: React.js, HTML5, CSS3, JavaScript (ES6+)
 
 State Management: React Hooks (useState, useEffect)
 
-Routing: React Router DOM
+Routing: React Router DO
 
 Backend: Node.js / Express (if applicable)
 
