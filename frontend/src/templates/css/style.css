@@ -8,6 +8,12 @@ body {
   overflow-x: hidden;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* Scroll Bar */
 
 ::-webkit-scrollbar-track {
@@ -42,7 +48,8 @@ nav {
 
 #search_field {
   height: 2.4rem;
-  padding: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.25rem;
 }
 
 #login_btn,
@@ -69,10 +76,13 @@ nav {
 /* Home page */
 #products_heading {
   margin-top: 1.8rem;
+  text-align: center;
 }
 
 .card {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-title a {
@@ -95,11 +105,17 @@ nav {
 #view_btn {
   background-color: #fa9c23;
   color: white;
+  margin-top: auto;
 }
 
 .card-img-top {
-  width: 200px;
-  height: 150px;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 220px;
+  height: auto;
+  margin: 0 auto 1rem;
+  object-fit: contain;
 }
 
 .ratings {

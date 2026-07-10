@@ -2,13 +2,20 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import {useState } from 'react';
 import {toast} from 'react-toastify';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1';
+
 export default function Cart({ cartItems, setCartItems }) {
     const [complete,setComplete] =  useState(false);
     function increaseQty(item) {
-        if (item.product.stock === item.qty) return;
+        const stockCount = Number(item.product.stock) || 0;
+        if (item.qty >= stockCount) {
+            toast.error('Out Of Stock');
+            return;
+        }
         const updatedItems = cartItems.map((i) => {
             if (i.product._id === item.product._id) {
-                i.qty++;
+                return { ...i, qty: i.qty + 1 };
             }
             return i;
         });
@@ -19,7 +26,7 @@ export default function Cart({ cartItems, setCartItems }) {
         if (item.qty > 1) {
             const updatedItems = cartItems.map((i) => {
                 if (i.product._id === item.product._id) {
-                    i.qty--;
+                    return { ...i, qty: i.qty - 1 };
                 }
                 return i;
             });
@@ -32,7 +39,7 @@ export default function Cart({ cartItems, setCartItems }) {
         setCartItems(updatedItems)
     }
     function placeOrderHandler(){
-        fetch(process.env.REACT_API_URL+'/order',{
+        fetch(`${API_URL}/order`,{
             method:'post',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify(cartItems)
@@ -57,7 +64,7 @@ export default function Cart({ cartItems, setCartItems }) {
                                 <div className="cart-item">
                                     <div className="row">
                                         <div className="col-4 col-lg-3">
-                                            <img src={item.product.images[0].image} alt={item.product.name} height="90" width="115" />
+                                            <img src={item.product?.images?.[0]?.image || '/images/products/1.jpg'} alt={item.product.name} height="90" width="115" />
                                         </div>
                                         <div className="col-5 col-lg-3">
                                             <Link to={`/product/${item.product._id}`}>{item.product.name}</Link>

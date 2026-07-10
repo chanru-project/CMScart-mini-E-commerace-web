@@ -1,19 +1,24 @@
 import { useState,useEffect } from 'react'
 import {useParams} from 'react-router-dom'
 import { toast } from 'react-toastify';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1';
+
 export default function ProductDetail({cartItems,setCartItems}){
     const[product,setProduct] = useState(null);
     const[qty,setQty]=useState(1);
     const{id} = useParams();
+    const imageSrc = product?.images?.[0]?.image || '/images/products/1.jpg';
+    const stockCount = Number(product?.stock) || 0;
 
     useEffect(()=>{
-       fetch(process.env.REACT_APP_API_URL+'/product/'+id)
+         fetch(`${API_URL}/product/${id}`)
        .then(res => res.json())
        .then(res => setProduct(res.product))
- },[])
+     },[id])
 
    function addToCart(){
-      const itemExist=cartItems.find((item)=>item.product._id==product._id)
+        const itemExist=cartItems.find((item)=>item.product._id === product._id)
        if(!itemExist){
         const newItem ={product,qty};
         setCartItems((state)=>[...state,newItem]);
@@ -22,7 +27,8 @@ export default function ProductDetail({cartItems,setCartItems}){
      
  }
    function increaseQty(){
-    if(product.stock==qty){
+    if(qty >= stockCount){
+        toast.error('Out Of Stock');
         return;
     }
     setQty((state)=>state+1);
@@ -37,7 +43,7 @@ export default function ProductDetail({cartItems,setCartItems}){
     return product &&  <div className="container container-fluid">
         <div className="row f-flex justify-content-around">
             <div className="col-12 col-lg-5 img-fluid" id="product_image">
-                <img src={product.images[0].image} alt="sdf" height="500" width="500"/>
+                <img src={imageSrc} alt={product.name} height="500" width="500"/>
             </div>
 
             <div className="col-12 col-lg-5 mt-5">
@@ -61,11 +67,11 @@ export default function ProductDetail({cartItems,setCartItems}){
 
                     <span className="btn btn-primary plus"onClick={increaseQty}>+</span>
                 </div>
-                 <button type="button" onClick={addToCart} disabled={product.stock==0} id="cart_btn" className="btn btn-primary d-inline ml-4">Add to Cart</button>
+                 <button type="button" onClick={addToCart} disabled={stockCount === 0} id="cart_btn" className="btn btn-primary d-inline ml-4">Add to Cart</button>
 
                 <hr/>
 
-                <p>Status: <span id="stock_status"className={product.stock > 0 ?'text-success':'text-danger'}>{product.stock >0 ?'In Stock':'out of stock'}</span></p>
+                <p>Status: <span id="stock_status"className={stockCount > 0 ?'text-success':'text-danger'}>{stockCount > 0 ?'In Stock':'Out Of Stock'}</span></p>
 
                 <hr/>
 
