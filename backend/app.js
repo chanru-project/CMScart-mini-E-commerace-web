@@ -17,9 +17,8 @@ app.use(cors());
 app.use('/api/v1/',products);
 app.use('/api/v1/',orders);
 
+const PORT = process.env.PORT || 8000;
 
-
-
-app.listen(process.env.PORT,() => {
- console.log(`Server listening to Port ${process.env.PORT} in ${process.env.NODE_ENV}`);
+app.listen(PORT,() => {
+ console.log(`Server listening to Port ${PORT} in ${process.env.NODE_ENV}`);
 });
