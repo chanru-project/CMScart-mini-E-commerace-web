@@ -14,6 +14,22 @@ connectDatabase();
 
 app.use(express.json());
 app.use(cors());
+
+app.get('/', (req, res) => {
+	res.json({
+		success: true,
+		message: 'CMScart backend is running',
+		api: '/api/v1'
+	});
+});
+
+app.get('/health', (req, res) => {
+	res.status(200).json({
+		success: true,
+		status: 'ok'
+	});
+});
+
 app.use('/api/v1/',products);
 app.use('/api/v1/',orders);
 
